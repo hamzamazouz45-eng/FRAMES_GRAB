@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مستخرج الفريمات</string>
+    <string name="tagline">حوّل الفيديو إلى صور</string>
+    <string name="choose_video">اختر الفيديو</string>
+    <string name="no_video">اضغط لاختيار فيديو</string>
+    <string name="choose_folder">مجلد الحفظ</string>
+    <string name="no_folder">اضغط لاختيار مجلد أو إنشاء مجلد جديد</string>
+    <string name="crop_label">الاحتفاظ بالجزء السفلي فقط (الترجمة)</string>
+    <string name="crop_off">بدون</string>
+    <string name="every_label">كل (ثانية)</string>
+    <string name="split_label">مجلد فرعي كل N (0 = إيقاف)</string>
+    <string name="start">ابدأ الاستخراج</string>
+    <string name="stop">إيقاف</string>
+    <string name="progress">%1$d من %2$d صورة</string>
+    <string name="keep_open">أبقِ التطبيق مفتوحاً أثناء الاستخراج</string>
+    <string name="done">تم · حُفظت %1$d صورة</string>
+    <string name="stopped">أُوقف · حُفظت %1$d صورة</string>
+    <string name="error">حدث خطأ: %1$s</string>
+    <string name="open_folder">فتح المجلد</string>
+    <string name="cant_open">افتحه من تطبيق الملفات</string>
+</resources>

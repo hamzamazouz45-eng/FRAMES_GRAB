@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Metallic bevel -->
+    <path
+        android:fillColor="#9A9A9A"
+        android:pathData="M35,27 h38 a8,8 0 0 1 8,8 v38 a8,8 0 0 1 -8,8 h-38 a8,8 0 0 1 -8,-8 v-38 a8,8 0 0 1 8,-8 z" />
+    <!-- Dark tile -->
+    <path
+        android:fillColor="#3A3A46"
+        android:pathData="M36,30 h36 a6,6 0 0 1 6,6 v36 a6,6 0 0 1 -6,6 h-36 a6,6 0 0 1 -6,-6 v-36 a6,6 0 0 1 6,-6 z" />
+    <!-- Video frame outline -->
+    <path
+        android:strokeColor="#E9E9E9"
+        android:strokeWidth="3"
+        android:pathData="M40,40 h28 v14 h-28 z" />
+    <!-- Subtitle bar -->
+    <path
+        android:fillColor="#2DB5B5"
+        android:pathData="M40,62 h28 v5 h-28 z" />
+</vector>
