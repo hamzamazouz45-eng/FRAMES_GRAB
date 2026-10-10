@@ -55,7 +55,7 @@ class MainVM(app: Application) : AndroidViewModel(app) {
             val u = Uri.parse(s)
             val ok = ctx.contentResolver.persistedUriPermissions
                 .any { it.uri == u && it.isWritePermission }
-            if (ok) setFolder(u)
+            if (ok) applyFolder(u)
         }
     }
 
@@ -82,10 +82,10 @@ class MainVM(app: Application) : AndroidViewModel(app) {
         } catch (_: Exception) {
         }
         prefs.edit().putString("tree", uri.toString()).apply()
-        setFolder(uri)
+        applyFolder(uri)
     }
 
-    private fun setFolder(uri: Uri) {
+    private fun applyFolder(uri: Uri) {
         folder = uri
         folderName = DocumentFile.fromTreeUri(ctx, uri)?.name ?: ""
         clearResult()
