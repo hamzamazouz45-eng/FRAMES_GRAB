@@ -116,16 +116,22 @@ private fun Screen(vm: MainVM, langLabel: String, onToggleLang: () -> Unit) {
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        // Header
+        // Header: big Arabic name with a small English line under it
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.app_name),
                     color = FG.Text,
-                    fontSize = 30.sp,
+                    fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                 )
-                Text(stringResource(R.string.tagline), color = FG.TextDim, fontSize = 14.sp)
+                Text(
+                    stringResource(R.string.tagline),
+                    color = FG.Teal,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 1.5.sp,
+                )
             }
             LangChip(langLabel, onToggleLang)
         }
@@ -208,15 +214,29 @@ private fun Screen(vm: MainVM, langLabel: String, onToggleLang: () -> Unit) {
             )
         }
 
+        // 5. What to produce
+        SwitchRow(
+            label = stringResource(R.string.switch_images),
+            checked = vm.saveImages,
+            onChange = { vm.saveImages = it },
+            enabled = !vm.running,
+        )
+        SwitchRow(
+            label = stringResource(R.string.switch_ocr),
+            checked = vm.doOcr,
+            onChange = { vm.doOcr = it },
+            enabled = !vm.running,
+        )
+
         Spacer(Modifier.height(2.dp))
 
-        // 5. Start / progress / stop
+        // 6. Start / progress / stop
         if (!vm.running) {
             BarButton(
                 text = stringResource(R.string.start),
                 color = FG.Teal,
                 onClick = vm::start,
-                enabled = vm.video != null && vm.folder != null,
+                enabled = vm.video != null && vm.folder != null && (vm.saveImages || vm.doOcr),
                 icon = { IconPlay() },
             )
         } else {
@@ -241,6 +261,26 @@ private fun Screen(vm: MainVM, langLabel: String, onToggleLang: () -> Unit) {
                 color = FG.Text,
                 fontSize = 15.sp,
             )
+            if (vm.doOcr) {
+                Text(
+                    stringResource(R.string.lines_found, vm.lines),
+                    color = FG.Teal,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                )
+                if (vm.lastText.isNotBlank()) {
+                    // Live preview of the last line that was read, to judge the quality.
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(FG.BgDeep)
+                            .padding(12.dp),
+                    ) {
+                        Text(vm.lastText, color = FG.Text, fontSize = 16.sp)
+                    }
+                }
+            }
             Text(
                 stringResource(R.string.keep_open),
                 color = FG.TextDim,
@@ -255,18 +295,27 @@ private fun Screen(vm: MainVM, langLabel: String, onToggleLang: () -> Unit) {
             )
         }
 
-        // 6. Result
+        // 7. Result
         val err = vm.errorMsg
         val dir = vm.outDir
         if (err != null) {
             Text(stringResource(R.string.error, err), color = FG.Red, fontSize = 15.sp)
         } else if (vm.finishedCount >= 0 && !vm.running) {
-            Text(
+            val msg = if (vm.ocrUsed) {
+                if (vm.stopped) {
+                    stringResource(R.string.stopped_ocr, vm.finishedCount, vm.lines)
+                } else {
+                    stringResource(R.string.done_ocr, vm.finishedCount, vm.lines)
+                }
+            } else {
                 if (vm.stopped) {
                     stringResource(R.string.stopped, vm.finishedCount)
                 } else {
                     stringResource(R.string.done, vm.finishedCount)
-                },
+                }
+            }
+            Text(
+                msg,
                 color = if (vm.stopped) FG.Olive else FG.Green,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,

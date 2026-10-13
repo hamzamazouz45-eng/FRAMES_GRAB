@@ -37,6 +37,8 @@ class MainVM(app: Application) : AndroidViewModel(app) {
     var cropPct by mutableFloatStateOf(25f)
     var everySec by mutableStateOf("1")
     var perFolder by mutableStateOf("0")
+    var saveImages by mutableStateOf(true)
+    var doOcr by mutableStateOf(true)
 
     // Run state
     var running by mutableStateOf(false); private set
@@ -46,6 +48,9 @@ class MainVM(app: Application) : AndroidViewModel(app) {
     var stopped by mutableStateOf(false); private set
     var errorMsg by mutableStateOf<String?>(null); private set
     var outDir by mutableStateOf<Uri?>(null); private set
+    var lines by mutableIntStateOf(0); private set
+    var lastText by mutableStateOf(""); private set
+    var ocrUsed by mutableStateOf(false); private set
 
     private var job: Job? = null
 
@@ -55,7 +60,7 @@ class MainVM(app: Application) : AndroidViewModel(app) {
             val u = Uri.parse(s)
             val ok = ctx.contentResolver.persistedUriPermissions
                 .any { it.uri == u && it.isWritePermission }
-            if (ok) setFolder(u)
+            if (ok) applyFolder(u)
         }
     }
 
@@ -82,10 +87,10 @@ class MainVM(app: Application) : AndroidViewModel(app) {
         } catch (_: Exception) {
         }
         prefs.edit().putString("tree", uri.toString()).apply()
-        setFolder(uri)
+        applyFolder(uri)
     }
 
-    private fun setFolder(uri: Uri) {
+    private fun applyFolder(uri: Uri) {
         folder = uri
         folderName = DocumentFile.fromTreeUri(ctx, uri)?.name ?: ""
         clearResult()
@@ -94,21 +99,30 @@ class MainVM(app: Application) : AndroidViewModel(app) {
     fun start() {
         val v = video ?: return
         val f = folder ?: return
-        val every = (everySec.toIntOrNull() ?: 1).coerceAtLeast(1)
-        val per = (perFolder.toIntOrNull() ?: 0).coerceAtLeast(0)
-        val crop = cropPct.toInt()
+        if (!saveImages && !doOcr) return
+        val opts = Extractor.Options(
+            everySec = (everySec.toIntOrNull() ?: 1).coerceAtLeast(1),
+            cropPct = cropPct.toInt(),
+            perFolder = (perFolder.toIntOrNull() ?: 0).coerceAtLeast(0),
+            saveImages = saveImages,
+            ocr = doOcr,
+        )
         val name = videoName.ifBlank { "video" }
 
         clearResult()
         running = true
         done = 0
         total = 0
+        lines = 0
+        lastText = ""
+        ocrUsed = doOcr
         job = viewModelScope.launch {
             try {
                 Extractor.run(
-                    ctx, v, f, name, every, crop, per,
+                    ctx, v, f, name, opts,
                     onDir = { outDir = it },
                     onProgress = { d, t -> done = d; total = t },
+                    onText = { n, s -> lines = n; lastText = s },
                 )
                 finishedCount = done
             } catch (e: CancellationException) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Frame Grab</string>
-    <string name="tagline">Video to still frames</string>
+    <string name="app_name">فريمر</string>
+    <string name="tagline">Easy Framing</string>
     <string name="choose_video">Choose video</string>
     <string name="no_video">Tap to pick a video</string>
     <string name="choose_folder">Save folder</string>
@@ -10,12 +10,17 @@
     <string name="crop_off">Off</string>
     <string name="every_label">Every (seconds)</string>
     <string name="split_label">Sub-folder every N (0 = off)</string>
-    <string name="start">Start extracting</string>
+    <string name="switch_images">Save images</string>
+    <string name="switch_ocr">Read Arabic text (OCR) → SRT + TXT</string>
+    <string name="start">Start</string>
     <string name="stop">Stop</string>
-    <string name="progress">%1$d / %2$d images</string>
-    <string name="keep_open">Keep the app open while extracting</string>
+    <string name="progress">%1$d / %2$d frames</string>
+    <string name="lines_found">%1$d lines of text found</string>
+    <string name="keep_open">Keep the app open while working</string>
     <string name="done">Done · %1$d images saved</string>
     <string name="stopped">Stopped · %1$d images saved</string>
+    <string name="done_ocr">Done · %1$d frames · %2$d lines of text</string>
+    <string name="stopped_ocr">Stopped · %1$d frames · %2$d lines saved so far</string>
     <string name="error">Something went wrong: %1$s</string>
     <string name="open_folder">Open folder</string>
     <string name="cant_open">Open it from your Files app</string>

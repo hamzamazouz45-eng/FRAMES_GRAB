@@ -153,6 +153,7 @@ fun PillField(
                 enabled = enabled,
                 singleLine = true,
                 textStyle = TextStyle(
+                    fontFamily = Tajawal,
                     color = Color(0xFF222222),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Medium,

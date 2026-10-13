@@ -12,15 +12,30 @@ android {
         applicationId = "com.framegrab.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
+
+        // Keep the APK smaller: only the phone CPU types that matter.
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
+    }
+
+    // A fixed key (app/debug.keystore) so every GitHub build is signed the same way
+    // and a new APK installs over the old one without uninstalling.
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            // Signed with the debug key so the APK installs directly (sideloading).
-            // For Google Play, build an AAB signed with your own upload key instead.
+            // For Google Play, build an AAB signed with your own private upload key instead.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -46,4 +61,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.core:core-ktx:1.13.1")
+    // Offline OCR engine (Tesseract)
+    implementation("cz.adaptech.tesseract4android:tesseract4android:4.7.0")
 }

@@ -16,6 +16,22 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      # The Arabic OCR data and the Tajawal font are fetched here (the build machine has internet)
+      # and packed inside the APK, so the finished app works fully offline.
+      - name: Download Arabic OCR data and Tajawal font
+        run: |
+          set -e
+          mkdir -p app/src/main/assets/tessdata app/src/main/res/font
+          curl -fL --retry 3 -o app/src/main/assets/tessdata/ara.traineddata \
+            https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/main/ara.traineddata
+          for w in Regular Medium Bold; do
+            lw=$(echo "$w" | tr 'A-Z' 'a-z')
+            curl -fL --retry 3 -o "app/src/main/res/font/tajawal_$lw.ttf" \
+              "https://raw.githubusercontent.com/google/fonts/main/ofl/tajawal/Tajawal-$w.ttf"
+          done
+          ls -la app/src/main/assets/tessdata app/src/main/res/font
+          test "$(stat -c%s app/src/main/assets/tessdata/ara.traineddata)" -gt 1000000
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.9

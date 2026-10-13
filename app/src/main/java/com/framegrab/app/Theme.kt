@@ -2,10 +2,15 @@ package com.framegrab.app
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
@@ -50,6 +55,13 @@ object FG {
     val BarShape = RoundedCornerShape(8.dp)
 }
 
+/** App font: Tajawal (Arabic + Latin). The font files are downloaded by the GitHub build. */
+val Tajawal = FontFamily(
+    Font(R.font.tajawal_regular, FontWeight.Normal),
+    Font(R.font.tajawal_medium, FontWeight.Medium),
+    Font(R.font.tajawal_bold, FontWeight.Bold),
+)
+
 @Composable
 fun FGTheme(content: @Composable () -> Unit) {
     MaterialTheme(
@@ -60,6 +72,7 @@ fun FGTheme(content: @Composable () -> Unit) {
             onSurface = FG.Text,
             onBackground = FG.Text,
         ),
-        content = content,
-    )
+    ) {
+        ProvideTextStyle(TextStyle(fontFamily = Tajawal)) { content() }
+    }
 }
