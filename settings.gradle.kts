@@ -10,6 +10,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // The OCR library (Tesseract4Android) is published on JitPack.
+        maven { url = uri("https://jitpack.io") }
     }
 }
 rootProject.name = "FrameGrab"
